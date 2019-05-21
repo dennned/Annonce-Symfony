@@ -1,0 +1,67 @@
+{% extends 'templates/front/base.html.twig' %}
+
+{% block body %}
+
+    {#<-- Filters -->#}
+    {% include 'front/post/filters.html.twig' with {
+        'filter_parameters': filter_parameters,
+        'category_id': category_id,
+        'filter_options': filter_options
+    } %}
+
+
+    {% if pagination is empty %}
+        <h1>No posts found</h1>
+    {% else %}
+        {#<div class="wrapper-page remodal-bg">#}
+        {#<div class="container container-smooth">#}
+
+        <div class="list-block margin-top-0">
+            <div class="list-body">
+
+                <div class="divTable" style="width: 100%; font-family: 'OS';">
+                    <div class="divTableBody">
+                        <div class="divTableRow bold">
+                            <div class="divTableCell divTableCell-w10">Photo</div>
+                            <div class="divTableCell divTableCell-w15">Title</div>
+                            {% for parameter in column_parameters %}
+                                <div class="divTableCell divTableCell-w10 {{ parameter.isBold == 0 ? 'd-n-768' : '' }}">{{ parameter.name }}</div>
+                            {% endfor %}
+                        </div>
+
+                        {% for post in pagination %}
+                            <div class="divTableRow divTableRowWhite">
+                                <div class="divTableCell divTableCell-w10">
+                                    {% for image in post.images %}
+                                        {% if image.isMain == 1 %}
+                                            <a style="margin: 1%; width: 15px" href="{{ path('front_post_show', {'id': post.id}) }}"><img src="{{ asset(image.path) }}" style="border:2px solid lightgrey; " width="100%"></a>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                                <div class="divTableCell divTableCell-w15">
+                                    <a href="{{ path('front_post_show', {'id': post.id}) }}">{{ post.title|truncate(30, true) }}</a>
+                                </div>
+                                {% for parameter in column_parameters %}
+                                    <div class="divTableCell divTableCell-w10 {{ parameter.isBold == 0 ? 'd-n-768' : '' }}">{{ options[post.id] is defined ? (options[post.id][parameter.id] is defined ? options[post.id][parameter.id].getName() : '') : '' }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="navigation">
+                    {{ knp_pagination_render(pagination) }}
+                </div>
+
+            </div>
+        </div>
+    {% endif %}
+
+    {#</div>#}
+    {#</div>#}
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

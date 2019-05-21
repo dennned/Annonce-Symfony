@@ -1,0 +1,134 @@
+security:
+    send_password_recovery:
+        mail_reset_password: |
+            'Bonjour,
+
+            Pour réinitialiser votre mot de passe, cliquez sur lien spécifié:
+            %url%
+
+            Le lien est valable 2 heures à compter de la date de votre demande
+            Cordialement,
+            administration'
+
+front:
+    my_post:
+        new:
+            mail_admin: |
+                Nouvel annonce a été crée.
+                Confirmez-le, le lien %url%
+            user_massage_success: Votre annonce a été ajoutée. En attente de la confirmation de l'administrateur
+            user_massage_error: Impossible d'ajouter le post
+
+Posts: Postes
+Users: Utilisateurs
+Category: Catégories
+Filters: Filtres
+User: Utilisateur
+Title: Titre
+actions: actes
+Parameters: Paramètres
+Parameter type: Type de paramètre
+
+Post an ad: Déposer une annonce
+Login: Se connecter
+My posts: Mes postes
+Profil: Profil
+Restore password: Restaurer le mot de passe
+Join Us: Inscription
+
+First name: Prénom
+Last name: Nom
+Tel: Tel
+Email: Email
+Password: Mot de passe
+Confirm password: Confirmez le mdp
+I have read and accept the rules: j'ai lu et j'accepte les règlements
+Validate: S'inscrire
+Country: Pays
+Site rules: Règles du site
+User with such email already exists!: Utilisateur avec un tel email existe déjà!
+
+Success! Thank you for your registration. Best Regards: Succès! Merci pour votre inscription. Meilleures salutations
+
+Terms of Use: Regles Generales
+Questions: Questions
+Ads: Pub
+Cooperation: Coopération
+
+Update: Valider
+Date: Date
+Actions: Actes
+Upload images: Télécharger images
+Description: Description
+Images: Images
+Upload: Télécharger
+Create new Post: Créer une nouvelle publication
+Back: Retourner
+
+Show Post: Afficher
+Edit: Modifier
+Delete: Supprimer
+Are you sure you want to delete?: Etes-vous sûr que vous voulez supprimer?
+Section: Section
+Create: Créer
+
+Show this post: Afficher le post
+Edit post: Modifier le post
+
+Create new: Créer un nouveau
+Id: Id
+Create new User: Créer un nouvel utilisateur
+Is user admin?: Est l'utilisateur admin?
+Edit User: Modifier l'utilisateur
+Show User: Montrer l'utilisateur
+Roles: Rôles
+Categories: Catégories
+Parent: Parent
+Name: Prénom
+Create new Category: Créer une nouvelle catégorie
+Only section: Seule section
+Edit Category: Modifier la catégorie
+Show Category: Afficher la catégorie
+Format: Format
+Form type: Type de formulaire
+Show in ...: Montre ...
+Is range in filters: Est gamme dans filtres
+Options: Les options
+Create new Parameter: Créer un nouveau paramètre
+Add an option: Ajouter une option
+Type: Type
+Tag: Étiquette
+Show in filters: Afficher dans filtres
+Show in columns: Afficher en colonnes
+Show in posts: Afficher dans postes
+Edit Parameter: Editer le paramètre
+Show Parameter: Afficher le paramètre
+Admin: Admin
+Index in filters: Index dans filtres
+Index in columns: Index en colonnes
+Index in posts: Index dans postes
+Is bold in posts: Est audacieux dans postes
+Date of publication: Date de publication
+
+For all time: Tous les temps
+For today: Pour aujourd'hui
+In two days: Dans deux jours
+In five days: Dans cinq jours
+
+An email has been sent to your email with a link to reset your password: Un email a été envoyé à votre adresse email avec un lien pour réinitialiser votre mot de passe
+User with this email not found: Utilisateur avec cet email non trouvé
+Your password has been successfully changed: Votre mot de passe a bien été changé
+Failed to change password: Impossible de changer le mot de passe
+Password recovery link lifetime out: Durée de vie du lien de récupération de mot de passe
+
+Show: Afficher
+Close: Fermer
+Attention: Attention
+Show phone: Afficher le téléphone
+Show email: Afficher l'email
+
+No posts found: Aucun article trouvé
+No users found: Aucun utilisateur trouvé
+No categories found: Aucune catégorie trouvée
+No parameters found: Aucun paramètre trouvé
+

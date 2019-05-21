@@ -1,0 +1,107 @@
+{% extends 'templates/admin/base.html.twig' %}
+
+{% block title %}{{ 'Parameters'|trans }}{% endblock %}
+
+{% block body %}
+<div class="list-block">
+    <div class="form__nav">
+        <a class="back_to" href="{{ path('admin_parameter_new') }}">{{ 'Create new'|trans }}</a>
+    </div>
+
+        <form method="post" action="{{ path('admin_parameter_index') }}">
+            <div style="margin: -42px 0 40px 0">
+                <select style="width: 14%; margin-right: 10px" name="section_id">
+                    <option value=""></option>
+                    {% for category in categories %}
+                        {% if category.parent.id == 0 and category.name != 'root' %}
+                            <option value="{{ category.id }}" {{ category.id == section_id ? 'selected' : '' }}>{{ category.name }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+
+                <button type="submit">Search</button>
+                <button><a href="{{ path('admin_parameter_index') }}">Clear</a></button>
+            </div>
+        </form>
+
+    <div class="list-body">
+        {% if pagination is not empty %}
+            <div class="divTable" style="width: 100%; font-family: 'OS';">
+                <div class="divTableBody">
+                    <div class="divTableRow bold">
+
+                        <div class="divTableCell id-cl">{{ knp_pagination_sortable(pagination, 'Id'|trans, 'parameter.id') }}</div>
+
+                        {#<div class="divTableCell id-cl">#}
+                            {#<a class="desc" href="{{ path('admin_parameter_index') }}?sort=category.id&amp;direction=asc&amp;page=1" title="Id">Id</a>#}
+                        {#</div>#}
+
+                        <div class="divTableCell divTableCell-w10">{{ knp_pagination_sortable(pagination, 'Category'|trans, 'category.name') }}</div>
+                        <div class="divTableCell divTableCell-w10">{{ knp_pagination_sortable(pagination, 'Name'|trans, 'parameter.name') }}</div>
+                        <div class="divTableCell divTableCell-w10">{{ knp_pagination_sortable(pagination, 'Format'|trans, 'parameter.type') }}</div>
+                        <div class="divTableCell divTableCell-w10">{{ knp_pagination_sortable(pagination, 'Form type'|trans, 'parameter.tag') }}</div>
+                        <div style=" width: 106px;" class="divTableCell divTableCell-w10">{{ 'Show in ...'|trans }}</div>
+                        <div style=" width: 70px;" class="divTableCell divTableCell-w10">{{ knp_pagination_sortable(pagination, 'Is range in filters'|trans, 'parameter.isRange') }}</div>
+                        <div class="divTableCell divTableCell-w25">{{ 'Options'|trans }}</div>
+                        <div style=" width: 122px;" class="divTableCell">{{ 'Actions'|trans }}</div>
+                    </div>
+                    {% for parameter in pagination %}
+                        <div class="divTableRow divTableRowWhite">
+                            <div class="divTableCell id-cl">
+                                {% if parameter.id < 10 %}
+                                    0{{ parameter.id }}
+                                {% else %}
+                                    {{ parameter.id }}
+                                {% endif %}
+                            </div>
+                            <div class="divTableCell divTableCell-w10">
+                                {% if parameter.category.name != 'root' %}
+                                    {{ parameter.category.name }}
+                                {% endif %}
+                            </div>
+                            <div class="divTableCell divTableCell-w10">{{ parameter.name }}</div>
+                            <div class="divTableCell divTableCell-w10">{{ parameter.type }}</div>
+                            <div class="divTableCell divTableCell-w10">{{ parameter.tag }}</div>
+                            <div style=" width: 106px;" class="divTableCell divTableCell-w10">
+                                <div>Filter: {{ parameter.isFilter ? 'yes' : 'no' }}</div>
+                                <div>Column: {{ parameter.isColumn ? 'yes' : 'no' }}</div>
+                                <div>Post: {{ parameter.isPost ? 'yes' : 'no' }}</div>
+                            </div>
+                            <div style=" width: 70px;" class="divTableCell divTableCell-w10">
+                                <div>{{ parameter.isRange ? 'yes' : 'no' }}</div>
+                            </div>
+                            <div class="divTableCell divTableCell-w25">
+                                {% if parameter.tag != 'Input' %}
+                                    {% for option in parameter.options %}
+                                        {{ option.getName() }},
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                            <div style=" width: 122px;" class="divTableCell actions">
+                                <a class="scnd" href="{{ path('admin_parameter_edit', {'id': parameter.id}) }}"><i class="fas fa-pencil-alt"></i></a>
+                                <a class="frst" href="{{ path('admin_parameter_show', {'id': parameter.id}) }}"><i class="fas fa-eye"></i></a>
+                                <a class="thrd delete_row" href="{{ path('admin_parameter_delete', {'id': parameter.id}) }}"><i class="fas fa-trash-alt"></i></a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="navigation">
+                {{ knp_pagination_render(pagination) }}
+            </div>
+        {% else %}
+            <h1 style="font-size: 21px !important;">{{ 'No parameters found'|trans }}</h1>
+        {% endif %}
+    </div>
+{% endblock %}
+
+    {% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $('.delete_row').click(function(){
+            return confirm("{{ 'Are you sure you want to delete?'|trans }}");
+        });
+    </script>
+
+{% endblock %}

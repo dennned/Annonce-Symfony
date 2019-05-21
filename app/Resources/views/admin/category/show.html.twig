@@ -1,0 +1,45 @@
+{% extends 'templates/admin/base.html.twig' %}
+
+{% block title %}{{ 'Show Category'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="wrapper-page remodal-bg">
+        <div class="container container-smooth">
+
+            <div class="list-block margin-top-0">
+                <div class="list-body">
+
+                    <h1 style="margin-bottom: 15px; font-size: 25px !important">{{ 'Show Category'|trans }}</h1>
+
+                    <div style="margin: 30px 0">
+                        <p><span class="bold">{{ 'Id'|trans }}:</span> {{ category.id }}</p>
+                        <p><span class="bold">{{ 'Parent'|trans }}:</span> {{ category.parent.name }}</p>
+                        <p><span class="bold">{{ 'Name'|trans }}:</span> {{ category.name }}</p>
+                    </div>
+
+                    <div class="form__nav" style="padding-top: 20px">
+                        <a class="back_to" href="{{ path('admin_category_index') }}">{{ 'Back'|trans }}</a>
+                        <a class="back_to" href="{{ path('admin_category_edit', {'id': category.id}) }}">{{ 'Edit'|trans }}</a>
+                        <a class="back_to delete_row" href="{{ path('admin_category_delete', {'id': category.id}) }}">{{ 'Delete'|trans }}</a>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $('.delete_row').click(function(){
+            return confirm("{{ 'Are you sure you want to delete?'|trans }}");
+        });
+    </script>
+
+{% endblock %}
+
+
+

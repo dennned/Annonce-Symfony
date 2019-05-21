@@ -1,0 +1,61 @@
+{% extends "templates/admin/base.html.twig" %}
+
+{% block title %}{{ 'Edit User'|trans }}{% endblock %}
+
+{% block body %}
+
+    <h1>{{ 'Edit User'|trans }}</h1>
+
+    {{ form_start(form) }}
+    <div id="form">
+        {{ form_row(form.first_name) }}
+        {{ form_row(form.last_name) }}
+        {{ form_row(form.country) }}
+        {{ form_row(form.phone) }}
+        {{ form_row(form.email) }}
+        {{ form_row(form.plainPassword.first) }}
+        {{ form_row(form.plainPassword.second) }}
+        {{ form_row(form.isAdmin) }}
+
+        {#<div style="padding: 20px 0 0 150px">#}
+            {#<button class="btn-save block-center">{{ button_label|default('Update') }}</button>#}
+        {#</div>#}
+
+        <div style="padding: 20px 0 0 150px; justify-content: center">
+            <button type="submit" class="btn-save">{{ 'Update'|trans }}</button>
+            <a class="back_to" href="{{ path('admin_user_index') }}">{{ 'Back'|trans }}</a>
+        </div>
+
+    </div>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $( document ).ready(function() {
+            {#{% if is_granted('ROLE_ADMIN') %}#}
+                {#$('#admin_user_isAdmin').prop('checked', true);#}
+            {#{% endif %}#}
+            // console.log();
+            
+            var userRoles = {{ user.roles|json_encode()|raw }};
+            var isAdmin = false;
+            $.each(userRoles, function( index, value ) {
+                if (value === 'ROLE_ADMIN') {
+                    isAdmin = true;
+                }
+            });
+            if (isAdmin) {
+                $('#admin_user_isAdmin').prop('checked', true);
+            }
+
+            $('#user_country').on('change', function (e) {
+                var countries = {{ countries|json_encode()|raw }};
+                $('#user_phone').val(countries[this.value]);
+            });
+        });
+    </script>
+
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends 'templates/admin/base.html.twig' %}
+
+{% block title %}{{ 'Create new User'|trans }}{% endblock %}
+
+{% block body %}
+
+    <h1>{{ 'Create new User'|trans }}</h1>
+
+    {{ form_start(form) }}
+    <div id="form">
+        {{ form_row(form.first_name) }}
+        {{ form_row(form.last_name) }}
+        {{ form_row(form.country) }}
+        {{ form_row(form.phone) }}
+        {{ form_row(form.email) }}
+        {{ form_row(form.plainPassword.first) }}
+        {{ form_row(form.plainPassword.second) }}
+        {{ form_row(form.isAdmin) }}
+
+        {#<div style="padding: 20px 0 0 150px">#}
+            {#<button type="submit" class="btn-save block-center" >{{ button_label|default('Save') }}</button>#}
+        {#</div>#}
+
+        <div style="padding: 20px 0 0 150px; justify-content: center">
+            <button type="submit" class="btn-save">{{ 'Create'|trans }}</button>
+            <a class="back_to" href="{{ path('admin_user_index') }}">{{ 'Back'|trans }}</a>
+        </div>
+
+    </div>
+
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $( document ).ready(function() {
+            setTel(73);
+
+            $('#admin_user_country').on('change', function (e) {
+                setTel(this.value)
+            });
+
+            function setTel(countryId) {
+                $('#admin_user_country option:selected').removeAttr('selected');
+                $('#admin_user_country option[value="'+countryId+'"]').prop('selected', true);
+
+                var countries = {{ countries|json_encode()|raw }};
+                $('#admin_user_phone').val(countries[countryId]);
+            }
+        });
+    </script>
+
+{% endblock %}

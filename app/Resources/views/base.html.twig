@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{% block title %}Welcome to Offre24 - site de petites annonces gratuites!{% endblock %}</title>
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('vendor/bootstrap/bootstrap.min.css') }}">
+        {#<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">#}
+        <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"
+              integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+              crossorigin="anonymous">
+    {% endblock %}
+    {% block shares %}
+        <meta property="og:title" content="OFFRE24">
+        <meta property="og:description" content="site de petites annonces gratuites">
+        <meta property="og:image" content="/img/PA.png">
+        <meta property="og:url" content="http://offre24.fr">
+        <meta name="twitter:card" content="summary_large_image">
+    {% endblock %}
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+</head>
+
+<body>
+<div class="mains-bodys">
+    <div class="mains-bodys-item">
+        {% block header %}{% endblock %}
+        {% block sidebar %}{% endblock %}
+        {% block body %}{% endblock %}
+    </div>
+    {% block footer %}
+        <nav style="margin-top: 50px" class="navbar navbar-fm remodal-bg">
+            <div id="conteneur" class="container container-smooth">
+                <div style="text-align: center; margin: 0 auto;width: fit-content;" class="collapse navbar-collapse" id="menu-main1">
+                    <ul class="nav navbar-nav">
+                        <li><a href="{{ path('front_index_rules') }}"><span>{{ 'Terms of Use'|trans }}</span></a></li>
+                        <li><a href="{{ path('front_index_questions') }}"><span>{{ 'Questions'|trans }}</span></a></li>
+                        <li><a href="{{ path('front_index_ads') }}"><span>{{ 'Ads'|trans }}</span></a></li>
+                        <li><a href="{{ path('front_index_cooperation') }}"><span>{{ 'Cooperation'|trans }}</span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    {% endblock %}
+</div>
+
+
+
+{% block javascripts %}
+    <script type="text/javascript" src="{{ asset('js/jquery-2.1.3.min.js') }}"></script>
+    {#<script type="text/javascript" src="{{ asset('vendor/bootstrap/bootstrap.min.js') }}"></script>#}
+    {#<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>#}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="{{ asset('js/remodal.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/script.js') }}"></script>
+
+    <!-- Notify -->
+    {% if app.flashes is defined %}
+        <script type="text/javascript" src="{{ asset('js/notify.min.js') }}"></script>
+        <script>
+            var options = {
+                // showDuration : 300,
+                autoHideDelay: 10000,
+            };
+            $.notify.defaults(options);
+        </script>
+
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <script>
+                    $.notify('{{ message }}', '{{ label }}');
+                </script>
+            {% endfor %}
+        {% endfor %}
+    {% endif %}
+
+{% endblock %}
+</body>
+
+</html>

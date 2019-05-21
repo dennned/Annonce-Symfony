@@ -1,0 +1,19 @@
+app:
+    resource: '@AppBundle/Controller/'
+    type: annotation
+login:
+    path: /login
+    defaults: { _controller: AppBundle:Security:login }
+    options: { i18n: true }
+register:
+    path: /register
+    defaults: { _controller: AppBundle:Registration:register }
+    options: { i18n: true }
+logout:
+    path: /logout
+    defaults: { _controller: AppBundle:Security:logout }
+    options: { i18n: true }
+
+oneup_uploader:
+    resource: .
+    type: uploader

@@ -1,0 +1,31 @@
+{% extends 'templates/front/base.html.twig' %}
+
+{% block body %}
+
+    <div class="wrapper-page remodal-bg">
+        <div class="container container-smooth">
+            <div class="cart-body">
+
+                {% for name, category in categories %}
+                    <div class="my-style-cart">
+                        <h3 class="border-class">{{ name }}</h3>
+                        <ul class="this-list">
+                            {% for cat in category['sub_categories'] %}
+                                <li><a class="this-link" href="{{ path('front_category_show', {'id': cat.id}) }}">{{ cat.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                        {% if category['image_path'] %}
+                            <img src="{{ asset(category['image_path']) }}"  style="vertical-align: center;" width="20%">
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

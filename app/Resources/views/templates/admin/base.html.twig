@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin panel{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+{% endblock %}
+
+{% block header %}
+    <nav class="navbar navbar-fm remodal-bg">
+        <div id="conteneur" class="container container-smooth">
+
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/">
+                    Annonces
+                </a>
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#menu-main"
+                    aria-expanded="false">
+                    <span class="sr-only">Menu</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+
+            <div class="collapse navbar-collapse" id="menu-main">
+                <ul style="margin-left: 8%" class="nav navbar-nav w-n-1000">
+                    <li><a class="posts {% if 'post' in app.request.get('_route') %} active {% endif %}" href="{{ path('admin_post_index') }}"><span>{{ 'Posts'|trans }}</span></a></li>
+                    <li><a class="users {% if 'user' in app.request.get('_route') %} active {% endif %}" href="{{ path('admin_user_index') }}">{{ 'Users'|trans }}</a></li>
+                    <li><a class="Category {% if 'category' in app.request.get('_route') %} active {% endif %}" href="{{ path('admin_category_index') }}">{{ 'Categories'|trans }}</a></li>
+                    <li><a class="filters {% if 'parameter' in app.request.get('_route')%} active {% endif %}" href="{{ path('admin_parameter_index') }}">{{ 'Parameters'|trans }}</a></li>
+                </ul>
+
+                <ul class="nav navbar-nav pull-right" style="margin-left: 20px">
+                    {% if app.request.locale == 'en' %}
+                        <li><a class="filters pull-right" href="{{ path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')|merge({ _locale: 'fr' } )) }}"><img class="cart-image" src="/img/icon_fr.png" alt="" width="18" height="18"></a></li>
+                    {% else %}
+                        <li><a class="filters pull-right" href="{{ path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')|merge({ _locale: 'en' } )) }}"><img class="cart-image" src="/img/icon_en.png" alt="" width="18" height="18"></a></li>
+                    {% endif %}
+                </ul>
+
+                <ul class="nav navbar-nav pull-right">
+                    {#{% if is_granted('IS_AUTHENTICATED_FULLY') == false %}#}
+                        {#<li><a href="{{ path('login') }}">Login</a></li>#}
+                    {#{% endif %}#}
+                    {#{% if is_granted('IS_AUTHENTICATED_FULLY') == false %}#}
+                        {#<li><a href="{{ path('register') }}">Register</a></li>#}
+                    {#{% endif %}#}
+
+                    {#{% if is_granted('ROLE_ADMIN') %}#}
+                        {#<li><a href="{{ path('front_index_index') }}">Front</a></li>#}
+                    {#{% endif %}#}
+                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                        <li><a href="{{ path('logout') }}"><img src="/img/icon_exit.svg" alt="Logout" width="18" height="18"></a></li>
+                    {% endif %}
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+{% endblock %}
+
+
+{% block body %}{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('js/scripts_admin.js') }}"></script>
+{% endblock %}

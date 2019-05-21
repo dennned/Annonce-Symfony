@@ -1,0 +1,69 @@
+<div class="wrapper-page remodal-bg">
+    <div class="container container-smooth">
+
+        <div class="list-block margin-top-0">
+            <div class="list-body list-body-filters">
+
+                <form method="post" action="{{ path('front_post_index', {'category_id': category_id}) }}">
+                    {#<form>#}
+                    {% for parameter in filter_parameters %}
+                        {% set min_value = filter_options[parameter.id] is defined ? (filter_options[parameter.id]['min_value'] is defined ? filter_options[parameter.id]['min_value'] : '') : '' %}
+                        {% set max_value = filter_options[parameter.id] is defined ? (filter_options[parameter.id]['max_value'] is defined ? filter_options[parameter.id]['max_value'] : '') : '' %}
+                        {% set value = filter_options[parameter.id] is defined ? (filter_options[parameter.id]['value'] is defined ? filter_options[parameter.id]['value'] : '') : '' %}
+                        <div class="wrapper-filters-width">
+                            <div class="bold">{{ parameter.name }}</div>
+                            <div>
+                                {% if parameter.getTag() == 'Input' %}
+                                    {% if parameter.getIsRange() == 1 %}
+                                        <input class="range-filters-width" type="text" id="" name="parameters[{{ parameter.id }}][min_value]" value="{{ min_value }}">
+                                            <span style="margin: -3px">-</span>
+                                        <input class="range-filters-width" type="text" id="" name="parameters[{{ parameter.id }}][max_value]" value="{{ max_value }}">
+                                    {% else %}
+                                        <input class="single-filters-width" type="text" id="" name="parameters[{{ parameter.id }}][value]" value="{{ value }}">
+                                    {% endif %}
+                                {% elseif parameter.getTag() == 'Select' %}
+                                    {% if parameter.getIsRange() == 1 %}
+                                        <select class="range-filters-width" id="" name="parameters[{{ parameter.id }}][min_value]">
+                                            <option></option>
+                                            {% for option in parameter.options %}
+                                                <option value="{{ option.getName() }}" {{ min_value == option.getName() ? 'selected' : '' }}>{{ option.getName() }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <span style="margin: -3px">-</span>
+                                        <select class="range-filters-width" id="" name="parameters[{{ parameter.id }}][max_value]">
+                                            <option></option>
+                                            {% for option in parameter.options %}
+                                                <option value="{{ option.getName() }}" {{ max_value == option.getName() ? 'selected' : '' }}>{{ option.getName() }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    {% else %}
+                                        <select class="single-filters-width" id="" name="parameters[{{ parameter.id }}][value]">
+                                            <option></option>
+                                            {% for option in parameter.options %}
+                                                <option value="{{ option.getName() }}" {{ value == option.getName() ? 'selected' : '' }}>{{ option.getName() }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <div style="margin-top: 20px">
+                        {% set period = filter_options['period'] is defined ? filter_options['period'] : '' %}
+                        <select style="width: 14%; margin-right: 10px" name="parameters[period]">
+                            <option value="" {{ period == '' ? 'selected' : '' }}>{{ 'For all time'|trans }}</option>
+                            <option value="0" {{ period == '0' ? 'selected' : '' }}>{{ 'For today'|trans }}</option>
+                            <option value="1" {{ period == '1' ? 'selected' : '' }}>{{ 'In two days'|trans }}</option>
+                            <option value="4" {{ period == '4' ? 'selected' : '' }}>{{ 'In five days'|trans }}</option>
+                        </select>
+
+                        <button type="submit">Search</button>
+                        <button><a href="{{ path('front_post_index', {'category_id': category_id}) }}">Clear filters</a></button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>

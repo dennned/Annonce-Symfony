@@ -1,0 +1,112 @@
+{% extends 'templates/admin/base.html.twig' %}
+
+{% block title %}{{ 'Show Post'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="wrapper-page remodal-bg">
+        <div class="container container-smooth">
+
+            <div class="list-block margin-top-0">
+                <div class="list-body">
+
+                    <h1 style="margin-bottom: 15px; font-size: 25px !important">{{ 'Show Post'|trans }}</h1>
+
+                    {#<div style="margin: 20px 0" class="slider-block">#}
+                        {#<div style="width: 80%; text-align: center" class="post-images">#}
+                            {#{% for image in post.images %}#}
+                                {#{% if image.isMain %}#}
+                                    {#<div style="display: block; width: 100%; height: 100%; border: 1px solid lightgrey; vertical-align: middle;">#}
+                                        {#<a href="javascript:showImage('{{ asset(image.path) }}');"><img src="{{ asset(image.path) }}"  style="max-width: 500px; max-height: 500px; margin: auto; width: 100%"></a>#}
+                                    {#</div>#}
+                                {#{% endif %}#}
+                            {#{% endfor %}#}
+                        {#</div>#}
+                    {#</div>#}
+
+                    <div style="margin: 30px 0">
+                        <p><span class="bold">{{ 'Id'|trans }}:</span> {{ post.id }}</p>
+                        <p><span class="bold">{{ 'User'|trans }}:</span> {{ post.user.getFirstName() }}</p>
+                        <p><span class="bold">{{ 'Title'|trans }}:</span> {{ post.title }}</p>
+                        <p><span class="bold">{{ 'Description'|trans }}:</span> {{ post.text }}</p>
+                        <p><span class="bold">{{ 'Category'|trans }}:</span> {{ post.category.name }}</p>
+                        <p><span class="bold">{{ 'Date'|trans }}:</span> {{ post.getCreatedAt()|date('d-m-Y H:i') }}</p>
+                    </div>
+
+                    <h2 style="font-size: 18px !important; text-decoration: underline" class="bold">{{ 'Parameters'|trans }}</h2>
+
+                    <div>
+                        {% for param in parameters %}
+
+                            {% if options[param.id] is defined and options[param.id]|length > 0 %}
+                                {% if param.tag == 'Multiselect'%}
+                                    <p>
+                                        <span class="parameter-item-active bold italic">{{ param.name }}:</span>
+                                        <ul>
+                                            {% for param_option in param.options %}
+                                                {% set option_class = 'parameter-option-no-active' %}
+                                                {% for post_option in options[param.id] %}
+                                                    {% if param_option.id == post_option.id %}
+                                                        {% set option_class = 'parameter-option-active' %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                                <li class="{{ option_class }}">{{ param_option.getName() }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </p>
+                                {% else %}
+                                    <p>
+                                        <span class="bold italic">{{ param.name }}:</span>
+                                        {{ options[param.id][0] is defined ? options[param.id][0].getName() : '' }}
+                                    </p>
+                                {% endif %}
+                            {% endif %}
+
+                        {% endfor %}
+                    </div>
+
+                    <div class="img-mini-gallery" style="margin: 20px 0">
+                        {% for image in post.images %}
+                            <div class="img-mini-gallery-item">
+                                <a href="javascript:showImage('{{ asset(image.path) }}');"><img src="{{ asset(image.path) }}"></a>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="form__nav" style="padding-top: 20px">
+                        <a class="back_to" href="{{ path('admin_post_index') }}">{{ 'Back'|trans }}</a>
+                        <a class="back_to" href="{{ path('admin_post_edit', {'id': post.id}) }}">{{ 'Edit'|trans }}</a>
+                        <a class="back_to delete_row" href="{{ path('admin_post_delete', {'id': post.id}) }}">{{ 'Delete'|trans }}</a>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Modal Image -->
+    <div class="modal fade" id="image-modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-img-size" role="document">
+            <div class="modal-content">
+                <img id="img-item" src="" width="100%" height="100%">
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $('.delete_row').click(function(){
+            return confirm("{{ 'Are you sure you want to delete?'|trans }}");
+        });
+
+        function showImage(imagePath) {
+            $('#image-modal').modal('show');
+            $('#img-item').attr('src', imagePath);
+        }
+    </script>
+
+{% endblock %}
+

@@ -1,0 +1,26 @@
+security:
+    send_password_recovery:
+        mail_reset_password: |
+            Hello,
+
+            To reset your password, go to the specified link:
+            %url%
+
+            The link is valid for 2 hours
+            Respectfully,
+            administration
+
+front:
+    my_post:
+        new:
+            mail_admin: |
+                A new advertisement has been created.
+                Confirm it, link %url%
+            user_massage_success: Your announcement has been added. Waiting for admin confirmation
+            user_massage_error: Failed to add post
+
+
+
+
+
+

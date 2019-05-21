@@ -1,0 +1,169 @@
+{% extends 'templates/admin/base.html.twig' %}
+
+{% block title %}{{ 'Create new Parameter'|trans }}{% endblock %}
+
+{% block body %}
+    <h1>{{ 'Create new Parameter'|trans }}</h1>
+
+{{ form_start(form, {attr: {'id': 'form'}}) }}
+
+    <div>
+        <label for="category_section" class="required">{{ 'Section'|trans }}</label>
+        <select id="category_section">
+            {% for category in categories %}
+                {% if category.parent.name == 'root'%}
+                    <option value="{{ category.id }}">{{ category.name }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+    </div>
+
+    <div>
+        <label for="only_section_checkbox">{{ 'Only section'|trans }}</label>
+        <input type="checkbox" id="only_section_checkbox">
+    </div>
+
+    {{ form_row(form.category) }}
+    {{ form_row(form.nameEn) }}
+    {{ form_row(form.nameFr) }}
+    {{ form_row(form.type) }}
+    {{ form_row(form.tag) }}
+
+    {{ form_row(form.isFilter) }}
+    <div>
+        {{ form_label(form.filtersIndex) }}
+        {{ form_errors(form.filtersIndex) }}
+        {{ form_widget(form.filtersIndex, {'value' : 0}) }}
+    </div>
+
+    {{ form_row(form.isColumn) }}
+    <div>
+        {{ form_label(form.columnsIndex) }}
+        {{ form_errors(form.columnsIndex) }}
+        {{ form_widget(form.columnsIndex, {'value' : 0}) }}
+    </div>
+
+    {{ form_row(form.isPost) }}
+    <div>
+        {{ form_label(form.postsIndex) }}
+        {{ form_errors(form.postsIndex) }}
+        {{ form_widget(form.postsIndex, {'value' : 0}) }}
+    </div>
+
+    {{ form_row(form.isRange) }}
+    {{ form_row(form.isBold) }}
+
+    <ul style="padding-left: 150px;" class="options"  data-index="" data-prototype="{{ form_widget(form.options.vars.prototype)|e('html_attr') }}"></ul>
+
+    <div style="padding: 20px 0 0 150px; justify-content: center">
+        <button type="submit" id="parameters_storage_save"  class="btn-save">{{ 'Create'|trans }}</button>
+        <a class="back_to" href="{{ path('admin_parameter_index') }}">{{ 'Back'|trans }}</a>
+    </div>
+
+{{ form_end(form) }}
+
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $(document).ready(function () {
+            addCategories();
+
+            $('#category_section').on('change', function (event) {
+                event.preventDefault();
+                addCategories();
+            });
+
+            $("#only_section_checkbox").on('change', function (event) {
+                event.preventDefault();
+                $('#parameter_category').parent().toggle();
+                addCategories();
+            });
+
+            function addCategories() {
+                $('#parameter_category > option').remove();
+                var section_id = $('#category_section').val();
+
+                if ($("#only_section_checkbox").is(':checked')) {
+                    $('#parameter_category').append($("<option selected></option>").attr("value", section_id));
+                } else {
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ (path('front_my_post_get_categories_ajax')) }}",
+                        data: {parent_category_id: section_id},
+                        success: function (data) {
+                            $('#parameter_category > option').remove();
+                            // $('.category').remove();
+
+                            var category_option = '';
+                            $.each(data, function (key, category) {
+                                if (category.name !== 'root') {
+                                    category_option += '<option value="' + category.id + '">' + category.name + '</option>';
+
+                                    if (category.sub_categories.length > 0) {
+                                        $.each(category.sub_categories, function (key, sub_category) {
+                                            category_option += '<option value="' + sub_category.id + '">&nbsp&nbsp&nbsp' + sub_category.name + '</option>';
+                                        });
+                                    }
+                                }
+                            });
+
+                            $('#parameter_category').append(category_option);
+                        },
+                        error: function () {
+                            console.log('addCategories() error');
+                        }
+                    });
+                }
+            }
+        });
+    </script>
+
+    <script>
+        var $collectionHolder;
+
+        // setup an "add a tag" link
+        var $addTagButton = $('<button type="button" class="add_tag_link">{{ 'Add an option'|trans }}</button>');
+        var $newLinkLi = $('<li></li>').append($addTagButton);
+
+        $(document).ready(function() {
+
+            var moveElement = $('#parameters_storage_options');
+
+            $collectionHolder = $('ul.options');
+            $collectionHolder.before(moveElement);
+
+            $collectionHolder.append($newLinkLi);
+            $collectionHolder.data('index', $collectionHolder.find(':input').length);
+
+            $addTagButton.on('click', function(e) {
+                addTagForm($collectionHolder, $newLinkLi);
+            });
+        });
+
+        function addTagForm($collectionHolder, $newLinkLi) {
+
+            var prototype = $collectionHolder.data('prototype');
+            var index = $collectionHolder.data('index');
+            var newForm = prototype;
+
+            newForm = newForm.replace(/__name__/g, index);
+            $collectionHolder.data('index', index + 1);
+
+            var $newFormLi = $('<li style="position: relative"></li>').append(newForm);
+            $newLinkLi.before($newFormLi);
+            $newFormLi.append($('<i style="position: absolute; right: 0; top: 0;" class="fa fa-times" aria-hidden="true"></i>'));
+        }
+
+        $(document).on('click', '.fa-times', deleteItem);
+
+        function deleteItem() {
+            $(this).closest('li').remove();
+        }
+    </script>
+
+{% endblock %}
+

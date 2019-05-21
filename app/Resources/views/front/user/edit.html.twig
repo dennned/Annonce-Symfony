@@ -1,0 +1,44 @@
+{% extends "templates/front/base.html.twig" %}
+
+{% block title %}{{ 'Profil'|trans }}{% endblock %}
+
+{% block body %}
+
+    <h1>{{ 'Profil'|trans }}</h1>
+
+    {{ form_start(form) }}
+    <div id="form">
+        {{ form_row(form.first_name) }}
+        {{ form_row(form.last_name) }}
+        {{ form_row(form.country) }}
+        {{ form_row(form.phone) }}
+        {{ form_row(form.email) }}
+        {{ form_row(form.plainPassword.first) }}
+        {{ form_row(form.plainPassword.second) }}
+
+        {#<div style="padding: 20px 0 0 150px">#}
+            {#<button class="btn-save block-center">{{ button_label|default('Update') }}</button>#}
+        {#</div>#}
+
+        <div style="padding: 20px 0 0 150px; justify-content: center">
+            <button type="submit" class="btn-save">{{ 'Update'|trans }}</button>
+            {#<a class="back_to" href="{{ path('admin_user_index') }}">Back to list</a>#}
+        </div>
+
+    </div>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $( document ).ready(function() {
+            $('#user_country').on('change', function (e) {
+                var countries = {{ countries|json_encode()|raw }};
+                $('#user_phone').val(countries[this.value]);
+            });
+        });
+    </script>
+
+{% endblock %}

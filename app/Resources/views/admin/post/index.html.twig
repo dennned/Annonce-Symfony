@@ -1,0 +1,75 @@
+{% extends 'templates/admin/base.html.twig' %}
+
+{% block title %}{{ 'Posts'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="list-block">
+        <div class="form__nav">
+            <a class="back_to" href="{{ path('admin_post_new') }}">{{ 'Create new'|trans }}</a>
+        </div>
+        <div class="list-body">
+            {% if pagination is not empty %}
+                <div class="divTable" style="width: 100%; font-family: 'OS';">
+                    <div class="divTableBody">
+                        <div class="divTableRow bold">
+                            <div class="divTableCell id-cl">{{ knp_pagination_sortable(pagination, 'Id'|trans, 'post.id') }}</div>
+                            <div class="divTableCell divTableCell-w10">{{ 'Image'|trans }}</div>
+                            <div class="divTableCell divTableCell-w15">{{ knp_pagination_sortable(pagination, 'User'|trans, 'user.firstName') }}</div>
+                            <div class="divTableCell divTableCell-w15">{{ knp_pagination_sortable(pagination, 'Category'|trans, 'category.name' ~ app.request.locale|capitalize) }}</div>
+                            <div class="divTableCell divTableCell-w20">{{ 'Title'|trans }}</div>
+                            <div class="divTableCell divTableCell-w10">{{ knp_pagination_sortable(pagination, 'Show Post'|trans, 'post.isValid') }}</div>
+                            <div class="divTableCell date-cl">{{ knp_pagination_sortable(pagination, 'Date'|trans, 'post.createdAt') }}</div>
+                            <div class="divTableCell act-cl">{{ 'Actions'|trans }}</div>
+                        </div>
+                        {% for post in pagination %}
+                            <div class="divTableRow divTableRowWhite">
+                                <div class="divTableCell id-cl">
+                                    {% if post.id < 10 %}
+                                        0{{ post.id }}
+                                    {% else %}
+                                        {{ post.id }}
+                                    {% endif %}
+                                </div>
+                                <div class="divTableCell divTableCell-w10">
+                                    {% for image in post.images %}
+                                        {% if image.isMain == 1 %}
+                                            <img src="{{ asset(image.path) }}" style="vertical-align: center;" width="50%">
+                                        {% endif %}
+                                    {% else %}
+                                        no image
+                                    {% endfor %}
+                                </div>
+                                <div class="divTableCell divTableCell-w15">{{ post.user.getFirstName() }}</div>
+                                <div class="divTableCell divTableCell-w15">{{ post.category.name }}</div>
+                                <div class="divTableCell divTableCell-w20">{{ post.title|truncate(40, true) }}</div>
+                                <div class="divTableCell divTableCell-w10">{{ post.isValid ? 'yes' : 'no' }}</div>
+                                <div class="divTableCell date-cl">{{ post.getCreatedAt()|date('d-m-Y G:i') }}</div>
+                                <div class="divTableCell act-cl actions">&nbsp;
+                                    <a class="scnd" href="{{ path('admin_post_edit', {'id': post.id}) }}"><i class="fas fa-pencil-alt"></i></a>
+                                    <a class="frst" href="{{ path('admin_post_show', {'id': post.id}) }}"><i class="fas fa-eye"></i></a>
+                                    <a class="thrd delete_row" href="{{ path('admin_post_delete', {'id': post.id}) }}"><i class="fas fa-trash-alt"></i></a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="navigation">
+                    {{ knp_pagination_render(pagination) }}
+                </div>
+            {% else %}
+                <h1 style="font-size: 21px !important;">{{ 'No posts found'|trans }}</h1>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $('.delete_row').click(function(){
+            return confirm("{{ 'Are you sure you want to delete?'|trans }}");
+        });
+    </script>
+
+{% endblock %}

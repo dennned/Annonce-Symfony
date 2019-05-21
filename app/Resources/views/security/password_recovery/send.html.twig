@@ -1,0 +1,37 @@
+{% extends 'templates/front/base.html.twig' %}
+
+{% block title %}{{ 'Restore password'|trans }}{% endblock %}
+
+{% block body %}
+
+    {#<div class="container">#}
+    {#<div class="row">#}
+    {#<div class="col-sm-12">#}
+    {#{% if error %}#}
+    {#<div class="text-center text-danger div-margin div-font">{{ error.messageKey|trans(error.messageData, 'security') }}</div>#}
+    {#{% endif %}#}
+    {#</div>#}
+    {#</div>#}
+    {#</div>#}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <h1>{{ 'Restore password'|trans }}</h1>
+
+                <div id="form_login" >
+                    <form action="{{ path('password_recovery_send') }}" method="post">
+                        <div class="form-group">
+                            <label for="email" class="required">Email:</label>
+                            <input type="text" id="email" class="form-control" name="email" value="" required/>
+                        </div>
+
+                        {#<input type="hidden" name="_target_path" value="/admin/posts" />#}
+
+                        <button type="submit">{{ 'Send'|trans }}</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

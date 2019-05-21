@@ -1,0 +1,99 @@
+{% extends 'templates/admin/base.html.twig' %}
+
+{% block title %}{{ 'Categories'|trans }}{% endblock %}
+
+{% block body %}
+
+    <div class="list-block">
+        <div class="form__nav">
+            <a class="back_to" href="{{ path('admin_category_new') }}">{{ 'Create new'|trans }}</a>
+        </div>
+
+        <form method="post" action="{{ path('admin_category_index') }}">
+            <div style="margin: -42px 0 40px 0">
+                <select style="width: 14%; margin-right: 10px" name="section_id">
+                    <option value=""></option>
+                    {% for category in categories %}
+                        {% if category.parent.id == 0 and category.name != 'root' %}
+                            <option value="{{ category.id }}" {{ category.id == section_id ? 'selected' : '' }}>{{ category.name }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+
+                <button type="submit">Search</button>
+                <button><a href="{{ path('admin_category_index') }}">Clear</a></button>
+            </div>
+        </form>
+
+        <div class="list-body">
+            {% if pagination is not empty %}
+                <div class="divTable" style="width: 100%; font-family: 'OS';">
+                    <div class="divTableBody">
+                        <div class="divTableRow bold">
+                            <div class="divTableCell id-cl">{{ knp_pagination_sortable(pagination, 'Id'|trans, 'category.id') }}</div>
+                            <div class="divTableCell divTableCell-w10">{{ 'Image'|trans }}</div>
+                            <div class="divTableCell divTableCell-w15">{{ knp_pagination_sortable(pagination, 'Parent'|trans, 'parent.name' ~ app.request.locale|capitalize) }}</div>
+                            <div class="divTableCell divTableCell-w15">{{ knp_pagination_sortable(pagination, 'Name'|trans, 'category.name' ~ app.request.locale|capitalize) }}</div>
+                            <div class="divTableCell divTableCell-w25">{{ 'Parameters'|trans }}</div>
+                            <div class="divTableCell act-cl">{{ 'Actions'|trans }}</div>
+                        </div>
+                        {% for category in pagination %}
+                            <div class="divTableRow divTableRowWhite">
+                                <div class="divTableCell id-cl">
+                                    {% if category.id < 10 %}
+                                        0{{ category.id }}
+                                    {% else %}
+                                        {{ category.id }}
+                                    {% endif %}
+                                </div>
+                                <div class="divTableCell divTableCell-w10">
+                                    {% if category.image %}
+                                        <img src="{{ asset(category.image.path) }}"  style="vertical-align: center;" width="50%" alt="{{ category.name }}">
+                                    {% else %}
+                                        no image
+                                    {% endif %}
+                                </div>
+                                <div class="divTableCell divTableCell-w15">
+                                    {% if category.parent.name != 'root' %}
+                                        {{ category.parent.name }}
+                                    {% endif %}
+                                </div>
+                                <div class="divTableCell divTableCell-w15">{{ category.name }}</div>
+                                <div class="divTableCell divTableCell-w25">
+                                    {% if category.parameters is not empty %}
+                                        {% for param in category.parameters %}
+                                            {{ param.name }},
+                                        {% endfor %}
+                                    {% else %}
+                                        no parameters found
+                                    {% endif %}
+                                </div>
+                                <div class="divTableCell act-cl actions">&nbsp;
+                                    <a class="scnd" href="{{ path('admin_category_edit', {'id': category.id}) }}"><i class="fas fa-pencil-alt"></i></a>
+                                    <a class="frst" href="{{ path('admin_category_show', {'id': category.id}) }}"><i class="fas fa-eye"></i></a>
+                                    <a class="thrd delete_row" href="{{ path('admin_category_delete', {'id': category.id}) }}"><i class="fas fa-trash-alt"></i></a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="navigation">
+                    {{ knp_pagination_render(pagination) }}
+                </div>
+            {% else %}
+                <h1 style="font-size: 21px !important;">{{ 'No categories found'|trans }}</h1>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $('.delete_row').click(function(){
+            return confirm("{{ 'Are you sure you want to delete?'|trans }}");
+        });
+    </script>
+
+{% endblock %}

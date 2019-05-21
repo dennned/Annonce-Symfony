@@ -1,0 +1,28 @@
+{% extends 'templates/front/base.html.twig' %}
+
+{% block body %}
+
+    <div class="wrapper-page remodal-bg">
+        <div class="container container-smooth">
+            <div class="cart-body">
+
+                <ul class="this-list this-list-categories">
+                    {% for cat in categories %}
+                        <li style="margin-bottom: 5px">
+                            <a class="this-link" href="{{ path('front_category_show', {'id': cat['sub_category'].id}) }}">{{ cat['sub_category'].name }}
+                                <span>({{ cat['posts_count'] }})</span>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

@@ -1,0 +1,190 @@
+{% extends 'templates/front/base.html.twig' %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block stylesheets %}
+    {{parent()}}
+    <link rel="stylesheet" href="{{ asset('vendor/slick-carousel/slick.css') }}">
+    {#<link rel="stylesheet" href="{{ asset('vendor/slick-carousel/slick-theme.css') }}">#}
+{% endblock %}
+{% block shares %}
+    <meta property="og:title" content="OFFRE24">
+    <meta property="og:description" content="site de petites annonces gratuites">
+    <meta property="og:image" content="/img/PA.png">
+    <meta property="og:url" content="http://offre24.fr">
+    <meta name="twitter:card" content="summary_large_image">
+{% endblock %}
+
+{% block body %}
+<div class="wrapper-page remodal-bg">
+    <div class="container container-smooth">
+
+        <div class="list-block margin-top-0">
+            <div class="list-body">
+
+                <h1 style="font-size: 25px !important">{{ post.title }}</h1>
+
+                <div style="margin: 20px 0" class="slider-block">
+                    <div style="width: 80%; text-align: center" class="post-images">
+                        {% for image in post.images %}
+                            <div style="display: flex; width: 100%; height: 100%; border: 1px solid lightgrey; vertical-align: middle;">
+                                <img src="{{ asset(image.path) }}" style="max-width: 500px; max-height: 500px; margin: auto; width: 100%">
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <p style="margin-top: 3%">{{ post.text }}</p>
+
+                {#<p style="margin: 3% 0 1% 5%; font-size: 20px !important">Parameters</p>#}
+                <div style="margin-top: 3%">
+                    {% for param in parameters %}
+
+                        {% if options[param.id] is defined and options[param.id]|length > 0 %}
+                            {% if param.tag == 'Multiselect'%}
+                                <p>
+                                    <span class="parameter-item-active bold italic">{{ param.name }}:</span>
+                                    <ul>
+                                        {% for param_option in param.options %}
+                                            {% set option_class = 'parameter-option-no-active' %}
+                                            {% for post_option in options[param.id] %}
+                                                {% if param_option.id == post_option.id %}
+                                                    {% set option_class = 'parameter-option-active' %}
+                                                {% endif %}
+                                            {% endfor %}
+                                            <li class="{{ option_class }}">{{ param_option.getName() }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </p>
+                            {% else %}
+                                {% if param.isBold == 1 %}
+                                    <p style="font-size: 20px !important;" class="bold">
+                                        <span style="font-size: 20px !important;" class="italic">{{ param.name }}:</span>
+                                {% else %}
+                                    <p>
+                                        <span class="bold italic">{{ param.name }}:</span>
+                                {% endif %}
+                                        {{ options[param.id][0] is defined ? options[param.id][0].getName() : '' }}
+                                    </p>
+                            {% endif %}
+                        {% endif %}
+
+                    {% endfor %}
+                </div>
+
+                <div class="img-mini-gallery" style="margin: 20px 0">
+                    {% for image in post.images %}
+                        <div class="img-mini-gallery-item">
+                            <a href="javascript:showImage('{{ asset(image.path) }}');"><img src="{{ asset(image.path) }}"></a>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <p>{{ 'Phone'|trans  }}:
+                    <span id="user_phone">
+                        {#<a data-toggle="modal" data-target="#elem-modal">Show phone</a>#}
+                        <a style=" text-decoration: underline; color: blue;" href="javascript:showModal('phone');">{{ 'Show phone'|trans }}</a>
+                    </span>
+                </p>
+                <p>{{ 'Email'|trans }}:
+                    <span id="user_email">
+                        <a style=" text-decoration: underline; color: blue;" href="javascript:showModal('email');">{{ 'Show email'|trans }}</a>
+                    </span>
+                </p>
+                <p style="margin-top: 30px; font-size: 14px !important;">{{ 'Date of publication'|trans }}: {{ post.createdAt|date('d.m.Y H:i') }}</p>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="elem-modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ 'Attention'|trans }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+{#                    <div class="g-recaptcha" data-sitekey="6Le4ip4UAAAAAMqGhzapL1xdGno1BV07SKqb19yq"></div>#}
+                    <div class="g-recaptcha" data-sitekey="6LduBaMUAAAAAHdCFuoi0qqF_zfembRsVzWRkV6z"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'Close'|trans }}</button>
+                    <button id="modal-btn" type="button" class="btn btn-primary"><a style="color: white;" id="modal-a">{{ 'Show'|trans }}</a></button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Image -->
+    <div class="modal fade" id="image-modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-img-size" role="document">
+            <div class="modal-content">
+                <img id="img-item" src="" width="100%" height="100%">
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    
+    <script type="text/javascript" src="{{ asset('vendor/slick-carousel/slick.min.js') }}"></script>
+    
+    <script src='https://www.google.com/recaptcha/api.js?hl={{ app.request.locale }}'></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('.post-images').slick({
+                infinite: true,
+            });
+        });
+
+        function show(content) {
+            $.ajax({
+                type: 'POST',
+                url: '{{ (path('front_index_captcha_ajax')) }}',
+                data: {'g-recaptcha-response': $('#g-recaptcha-response').val()},
+                success: function (result) {
+                    if (result) {
+                        $('#elem-modal').modal('hide');
+
+                        if (content === 'email') {
+                            $('#user_email').html('{{ post.user.email }}');
+                        } else if (content === 'phone') {
+                            $('#user_phone').html('{{ post.user.phone }}');
+                        }
+
+                        grecaptcha.reset();
+                    }
+                },
+                error: function () {
+                    console.log('error');
+                }
+            });
+        }
+
+        function showModal(content) {
+            $('#elem-modal').modal('show');
+            $('#modal-a').attr('href', 'javascript:show("' + content + '")');
+        }
+
+        function showImage(imagePath) {
+            $('#image-modal').modal('show');
+            $('#img-item').attr('src', imagePath);
+        }
+
+    </script>
+
+{% endblock %}
+
+

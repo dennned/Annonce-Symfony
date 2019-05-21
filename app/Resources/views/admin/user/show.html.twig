@@ -1,0 +1,57 @@
+{% extends 'templates/admin/base.html.twig' %}
+
+{% block title %}{{ 'Show User'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="wrapper-page remodal-bg">
+        <div class="container container-smooth">
+
+            <div class="list-block margin-top-0">
+                <div class="list-body">
+
+                    <h1 style="margin-bottom: 15px; font-size: 25px !important">{{ 'Show User'|trans }}</h1>
+
+                    <div style="margin: 30px 0">
+                        <p><span class="bold">{{ 'Id'|trans }}:</span> {{ user.id }}</p>
+                        <p><span class="bold">{{ 'Email'|trans }}:</span> {{ user.email }}</p>
+                        <p><span class="bold">{{ 'Roles'|trans }}:</span>
+                            {% set is_admin = 'no' %}
+                            {% for role in user.roles %}
+                                {{ role }},
+                                {% if role == 'ROLE_ADMIN' %}
+                                    {% set is_admin = 'yes' %}
+                                {% endif %}
+                            {% endfor %}
+                        </p>
+                        <p><span class="bold">{{ 'First name'|trans }}:</span> {{ user.firstName }}</p>
+                        <p><span class="bold">{{ 'Last name'|trans }}:</span> {{ user.lastName }}</p>
+                        <p><span class="bold">{{ 'Country'|trans }}:</span> {{ user.country.name }}</p>
+                        <p><span class="bold">{{ 'Tel'|trans }}:</span> {{ user.phone }}</p>
+                        <p><span class="bold">{{ 'Admin'|trans }}:</span> {{ is_admin }}</p>
+                    </div>
+
+                    <div class="form__nav" style="padding-top: 20px">
+                        <a class="back_to" href="{{ path('admin_user_index') }}">{{ 'Back'|trans }}</a>
+                        <a class="back_to" href="{{ path('admin_user_edit', {'id': user.id}) }}">{{ 'Edit'|trans }}</a>
+                        <a class="back_to delete_row" href="{{ path('admin_user_delete', {'id': user.id}) }}">{{ 'Delete'|trans }}</a>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        $('.delete_row').click(function(){
+            return confirm("{{ 'Are you sure you want to delete?'|trans }}");
+        });
+    </script>
+
+{% endblock %}
+
+
