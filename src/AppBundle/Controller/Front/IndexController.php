@@ -24,20 +24,15 @@ class IndexController extends Controller
         $root_categories = $catRepos->findByParent(0);
 
         $categories = [];
-        dump($root_categories);
-
         foreach ($root_categories as $root_category) {
             if ($root_category->getName() == 'root') {
                 continue;
             }
-//            $categories[$root_category->getName()] = $catRepos->findByParent($root_category->getId());
             $categories[$root_category->getName()] = [
                 'sub_categories' => $catRepos->findByParent($root_category->getId()),
                 'image_path' => $root_category->getImage() ? $root_category->getImage()->getPath() : '',
             ];
         }
-
-        dump($categories);
 
 		return $this->render('front/index/index.html.twig', [
             'categories' => $categories,
